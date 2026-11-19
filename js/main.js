@@ -1,4 +1,8 @@
-// Speed lines, scroll camera path, resize, render loop
+// Bootstrap: load part files listed in parts.js, then start camera path, speed lines and render loop
+const ld=s=>new Promise(ok=>{const e=document.createElement('script');e.src=s;e.onload=ok;e.onerror=()=>{console.warn('failed to load '+s);ok()};document.head.appendChild(e)});
+ld('js/parts.js').then(async()=>{for(const p of PARTS)await ld('js/'+p+'.js');start()});
+
+function start(){
 const N=140,lp=new Float32Array(N*6);
 for(let i=0;i<N;i++){const x=Math.random()*40-20,y=Math.random()*3+.1,z=(Math.random()<.5?-1:1)*(1.6+Math.random()*6);lp.set([x,y,z,x+1.5+Math.random()*2,y,z],i*6)}
 const lg=new T.BufferGeometry();lg.setAttribute('position',new T.BufferAttribute(lp,3));
@@ -25,3 +29,4 @@ function loop(t){requestAnimationFrame(loop);const dt=Math.min((t-t0)/1000,.05);
  p1.position.x=-4+Math.sin(t*.0008)*2;
  R.render(S,cam);}
 requestAnimationFrame(t=>{t0=t;loop(t);const l=document.getElementById('load');l.style.opacity=0;setTimeout(()=>l.remove(),900)});
+}
